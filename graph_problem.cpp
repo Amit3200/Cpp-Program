@@ -1,52 +1,62 @@
 #include<bits/stdc++.h>
 using namespace std;
-void bfs(vector<int> graph[],int n,int k){
-    int visited[n+5];
-    int distance[n+5];
-    for(int i=0;i<n+4;i++){
-        visited[i]=-1;
-        distance[i]=-1;
-    }
-    visited[k]=1;
-    distance[k]=0;
-    queue<int> q;
-    q.push(k);
-    while(!q.empty()){
-        int node=q.front();
-        q.pop();
-        for(int i=0;i<graph[node].size();i++){
-            if(visited[graph[node][i]]==-1){
-                visited[graph[node][i]]=1;
-                distance[graph[node][i]]=6+distance[node];
-                q.push(graph[node][i]);
-            }
-        }
-    }
-    for(int i=1;i<=n;i++){
-        if(i==k){
-            continue;
-        }
-        else{
-            cout<<distance[i]<<" ";
-        }
-    }
-    cout<<"\n";
-}
 int main(){
-    int t;
-    cin>>t;
-    while(t--){
-        int n,m;
-        cin>>n>>m;
-        vector<int> graph[n+5];
-        for(int i=0;i<m;i++){
-            int u,v;
-            cin>>u>>v;
-            graph[u].push_back(v);
-            graph[v].push_back(u);
-        }
-        int k;
-        cin>>k;
-        bfs(graph,n,k);
-    }
+	int n;
+	cin>>n;
+	vector<int> graph[n+10];
+	int dist[n+4];
+	for(int i=1;i<n;i++){
+		int k1;
+		cin>>k1;
+		//cout<<k1;
+		dist[i]=k1;
+		if(k1==1){
+			graph[i].push_back(i+1);
+		}
+		else{
+			graph[i+1].push_back(i);
+		}
+	}
+	int q;
+	cin>>q;
+	//cout<<"hello"<<q;
+	while(q--){
+		string ch;
+		cin>>ch;
+		if(ch=="Q"){
+			int v;
+			cin>>v;
+			int ans=0;
+			bool visited[n+3];
+			for(int i=0;i<n+2;i++){
+				visited[i]=false;
+			}
+			visited[v]=true;
+			queue<int> q;
+			q.push(v);
+			while(!q.empty()){
+				int node=q.front();
+				q.pop();
+				for(int i=0;i<graph[node].size();i++){
+					visited[graph[node][i]]=true;
+					ans+=1;
+					q.push(graph[node][i]);
+				}
+			}
+			cout<<ans+1<<"\n";
+		}
+		else{
+			for(int i=0;i<n+1;i++){
+				graph[i].clear();
+			}
+			for(int i=1;i<n;i++){
+				if(dist[i]==1){
+				graph[i+1].push_back(i);	
+				}
+				else{
+				graph[i].push_back(i+1);
+				}
+			}
+		}
+	}
 }
