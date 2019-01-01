@@ -1,0 +1,45 @@
+#include<bits/stdc++.h>
+using namespace std;
+int visited[100045];
+int edges[100045],k=0;
+int dfs(vector<int> graph[],int st,int n){
+	stack<int> stack;int edc=0;
+	stack.push(st);
+	while(!stack.empty()){
+		int node=stack.top();
+		if(visited[node]==-1){
+			edc+=1;
+			visited[node]=1;
+			cout<<node<<" ";
+		}
+		for(auto i=graph[node].begin();i!=graph[node].end();i++){
+			if(visited[*i]==-1){
+				stack.push(*i);
+			}
+		}
+	}
+	return edc;
+}
+int main(){
+	int n,m;
+	cin>>n>>m;
+	vector<int> graph[n+3];int st;
+	for(int i=0;i<m;i++){
+		int u,v;
+		cin>>u>>v;
+		graph[u].push_back(v);
+		graph[v].push_back(u);
+		if(i==0)
+		st=u;
+	}
+	for(int i=0;i<n+3;i++){
+		visited[i]=-1;
+	}
+	for(int i=1;i<=n;i++){
+	if(visited[i]==-1){
+	edges[k++]=dfs(graph,i,n);
+	cout<<"\n";
+	}
+	}
+	
+}
