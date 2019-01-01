@@ -2,22 +2,29 @@
 using namespace std;
 int visited[100045];
 int edges[100045],k=0;
+map<pair<int,int>,int> fr;
 int dfs(vector<int> graph[],int st,int n){
 	stack<int> stack;int edc=0;
 	stack.push(st);
 	while(!stack.empty()){
 		int node=stack.top();
+		stack.pop();
 		if(visited[node]==-1){
 			edc+=1;
 			visited[node]=1;
-			cout<<node<<" ";
+			//cout<<node<<" ";
 		}
 		for(auto i=graph[node].begin();i!=graph[node].end();i++){
+		    if(st==*i && visited[*i]==1){
+		        edc+=fr[make_pair(node,*i)];
+		        visited[*i]=2;
+		    }
 			if(visited[*i]==-1){
 				stack.push(*i);
 			}
 		}
 	}
+	//cout<<edc<<"edc \n";
 	return edc;
 }
 int main(){
@@ -31,6 +38,9 @@ int main(){
 		graph[v].push_back(u);
 		if(i==0)
 		st=u;
+		if(u==v){
+		    fr[make_pair(u,v)]+=1;
+		}
 	}
 	for(int i=0;i<n+3;i++){
 		visited[i]=-1;
@@ -38,8 +48,13 @@ int main(){
 	for(int i=1;i<=n;i++){
 	if(visited[i]==-1){
 	edges[k++]=dfs(graph,i,n);
-	cout<<"\n";
 	}
 	}
-	
+	int mx=edges[0];
+	for(int i=0;i<k;i++){
+		if(mx<edges[i]){
+			mx=edges[i];
+		}
+	}
+	cout<<mx-1<<"\n";
 }
