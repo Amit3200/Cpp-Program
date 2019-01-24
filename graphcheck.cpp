@@ -6,6 +6,7 @@ bool visited[100030]={false};
 vector<lld> check;
 map<char,int> mp;
 lld counter=0;
+bool dragon=false;
 void search(char key,string s){
 //	cout<<"Search me  \n";
 //	cout<<key<<" "<<s<<" \n";
@@ -19,18 +20,22 @@ void search(char key,string s){
 	}
 //	cout<<"Counter : "<<counter<<"\n";
 }
-void dfs(int node,string s,char parents[]){
+void dfs(int node,string s,char parents[],int m){
 	//cout<<"DFS";
 	visited[node]=true;
-	check.push_back(node);
 	//cout<<node<<" : Node Value "<<graph[node].size()<<" \n";
+	if(node==m){
+		dragon=true;
+	}
+	if(dragon){
+		check.push_back(node);
+	}
 	for(int i=0;i<graph[node].size();i++){
 		if(!visited[graph[node][i]]){
 //			cout<<"Adjancy Check : "<<graph[node][i]<<" \n";
-			if(graph[node][i]>=node){
-			check.push_back(graph[node][i]);
-			dfs(graph[node][i],s,parents);
-			}
+			if(dragon){
+			check.push_back(graph[node][i]);}
+			dfs(graph[node][i],s,parents,m);	
 		}
 	}
 }
@@ -60,12 +65,13 @@ int main(){
 		graph[v].push_back(u);
 	}
 	while(q--){
+	    dragon=false;
 		int m;
 		cin>>m;
 		char krona[m+3];
 		string s;
 		cin>>s;
-		dfs(m,s,parents);
+		dfs(1,s,parents,m);
 		checker(s,parents);
 	}
 }
